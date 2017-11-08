@@ -119,11 +119,12 @@ public class pa2 {
                     row = i;
                     col = j;
                 }
+                //check if min = 2 and break
             }
         }
 
         for(int i = 0; i < board[row][col].possible.size(); i++){
-            Cell[][] boardCopy = board.clone();
+            Cell[][] boardCopy = cloneBoard(board);
             boardCopy[row][col].fixed = true;
             boardCopy[row][col].value = board[row][col].possible.get(i);
             updateBasic(boardCopy,row,col);
@@ -138,6 +139,22 @@ public class pa2 {
         return null;
     }
 
+    public static Cell[][] cloneBoard(Cell[][] oldBoard){
+        Cell[][] newBoard = new Cell[9][9];
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                temp.addAll(oldBoard[i][j].possible);
+                Cell cell = new Cell(oldBoard[i][j].value, oldBoard[i][j].fixed, temp);
+                newBoard[i][j] = cell;
+            }
+        }
+
+        return newBoard;
+
+
+    }
     public static void temp(Cell[][] boardCopy){
         boolean flag = true;
         while(flag){
@@ -206,7 +223,7 @@ public class pa2 {
 
         for(int l = 0; l < 2; l++){
             for(int m = 0; m < 2; m++){
-                if(board[rowTemp[l]][colTemp[m]].possible.contains(board[i][j].value)){
+                if(board[rowTemp[l]][colTemp[m]].possible.contains(board[i][j].value) && !board[rowTemp[l]][colTemp[m]].fixed){
                     board[rowTemp[l]][colTemp[m]].possible.remove(board[i][j].value);
                 }
             }
