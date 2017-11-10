@@ -51,9 +51,6 @@ public class pa2 {
         count[0] = 1;
         Cell[][] solution = solve(board, count);
 
-        //TODO: Add more reductions
-        //System.out.println(board[0][0].possible);
-
         printSolution(solution, pw, count);
         pw.close();
 
@@ -184,34 +181,23 @@ public class pa2 {
      *  @param col current column to check
     */
     public static void onlyOneUpdate(Cell[][] boardCopy, int row, int col){
-        boolean flagRow = true;
-        while(flagRow){
-            flagRow = false;
-            for(int l = 0; l < 9; l++){
-                if(!boardCopy[row][l].fixed && boardCopy[row][l].possible.size() == 1){
-                    flagRow = true;
-                    boardCopy[row][l].value = boardCopy[row][l].possible.get(0);
-                    boardCopy[row][l].fixed = true;
-                    updateTotal(boardCopy, row, l);
-                }
+
+        for(int l = 0; l < 9; l++){
+            if(!boardCopy[row][l].fixed && boardCopy[row][l].possible.size() == 1){
+                boardCopy[row][l].value = boardCopy[row][l].possible.get(0);
+                boardCopy[row][l].fixed = true;
+                updateTotal(boardCopy, row, l);
             }
         }
 
-        boolean flagCol = true;
-        while(flagCol){
-            flagCol = false;
-            for(int l = 0; l < 9; l++){
-                if(!boardCopy[l][col].fixed && boardCopy[l][col].possible.size() == 1){
-                    flagCol = true;
-                    boardCopy[l][col].value = boardCopy[l][col].possible.get(0);
-                    boardCopy[l][col].fixed = true;
-                    updateTotal(boardCopy, l, col);
-                }
+        for(int l = 0; l < 9; l++){
+            if(!boardCopy[l][col].fixed && boardCopy[l][col].possible.size() == 1){
+                boardCopy[l][col].value = boardCopy[l][col].possible.get(0);
+                boardCopy[l][col].fixed = true;
+                updateTotal(boardCopy, l, col);
             }
         }
 
-        //boolean flagSubgrid = true;
-        //TODO finish subgrid one possible
         int rowTemp[] = new int[2];
         int colTemp[] = new int[2];
 
@@ -241,19 +227,16 @@ public class pa2 {
             colTemp[1] = col - 1;
         }
 
-        //while(flagSubgrid){
-            //flagSubgrid = false;
-            for(int l = 0; l < 2; l++){
-                for(int m = 0; m < 2; m++){
-                    if(boardCopy[rowTemp[l]][colTemp[m]].possible.size() == 1 && !boardCopy[rowTemp[l]][colTemp[m]].fixed){
-                        //flagSubgrid = true;
-                        boardCopy[rowTemp[l]][colTemp[m]].value = boardCopy[rowTemp[l]][colTemp[m]].possible.get(0);
-                        boardCopy[rowTemp[l]][colTemp[m]].fixed = true;
-                        updateTotal(boardCopy, rowTemp[l], colTemp[m]);
-                    }
+
+        for(int l = 0; l < 2; l++){
+            for(int m = 0; m < 2; m++){
+                if(boardCopy[rowTemp[l]][colTemp[m]].possible.size() == 1 && !boardCopy[rowTemp[l]][colTemp[m]].fixed){
+                    boardCopy[rowTemp[l]][colTemp[m]].value = boardCopy[rowTemp[l]][colTemp[m]].possible.get(0);
+                    boardCopy[rowTemp[l]][colTemp[m]].fixed = true;
+                    updateTotal(boardCopy, rowTemp[l], colTemp[m]);
                 }
             }
-        //}
+        }
 
     }
 
