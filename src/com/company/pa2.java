@@ -18,9 +18,12 @@ public class pa2 {
         File infile = new File(args[0]);
         File outfile = new File(args[1]);
         Scanner scanner = null;
+        PrintWriter pw = null;
 
         try {
             scanner = new Scanner(infile);
+            pw = new PrintWriter(outfile);
+
         } catch (FileNotFoundException e) {
             System.out.print(e);
         }
@@ -44,36 +47,37 @@ public class pa2 {
 
         updateInitial(board);
 
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                System.out.print(board[i][j].value + "");
-            }
-            System.out.print("\n");
-        }
-
         int[] count = new int[1];
         count[0] = 1;
         Cell[][] solution = solve(board, count);
 
         //TODO: Add more reductions
-        //TODO: Print
         //System.out.println(board[0][0].possible);
 
+        printSolution(solution, pw, count);
+        pw.close();
+
+    }
+
+    /*
+     *  This is a helper method to print the solution
+     *  @param solution solved board
+     *  @param pw to write to file
+    */
+    public static void printSolution(Cell[][] solution, PrintWriter pw, int[] count){
         if(solution == null){
-            System.out.println("NuLLLLL");
+            pw.println("Infeasible");
         }
         else {
             //Print Board
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
-                    System.out.print(solution[i][j].value + "");
+                    pw.print(solution[i][j].value + " ");
                 }
-                System.out.print("\n");
+                pw.print("\n");
             }
         }
-
-        System.out.println("Number of nodes made: " + count[0]);
-
+        pw.println("Nodes generated = " + count[0]);
     }
 
     /*
@@ -143,6 +147,10 @@ public class pa2 {
         return null;
     }
 
+    /* Helper method to clone the current board state
+     * @param old board board to be copied
+     * @return newBoard copy of old board
+     */
     public static Cell[][] cloneBoard(Cell[][] oldBoard){
         Cell[][] newBoard = new Cell[9][9];
 
@@ -156,15 +164,25 @@ public class pa2 {
         }
 
         return newBoard;
-
-
     }
 
+    /* Helper method to call reduction update methods
+     * @param board current board state
+     * @param row current row to check
+     * @param col current column to check
+     */
     public static void updateTotal(Cell[][] board, int row, int col){
         updateBasic(board, row, col);
         onlyOneUpdate(board, row, col);
         //further reductions
     }
+
+    /* //TODO finish comment, wasn't sure if you wanna change this?
+     *  This method
+     *  @param Cell[][] boardCopy
+     *  @param row current row to check
+     *  @param col current column to check
+    */
     public static void onlyOneUpdate(Cell[][] boardCopy, int row, int col){
         boolean flagRow = true;
         while(flagRow){
